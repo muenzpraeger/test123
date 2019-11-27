@@ -53,7 +53,9 @@ jobs:
 
             # Lint Aura components (needs)
             - name: 'Lint Aura components'
-              run: npm run lint:aura
+              uses: forcedotcom/salesforcedx-actions@master
+              with:
+                args: 'force:lightning:lint force-app/main/default/aura --exit'
 
             # Create scratch org
             - name: 'Create scratch org'
