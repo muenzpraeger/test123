@@ -33,7 +33,7 @@ jobs:
             - name: 'Unit test Lightning Web Components'
               run: npm run test:unit:coverage
 
-    dx:
+    salesforce-dx:
         runs-on: ubuntu-latest
         needs: formatting-and-linting
         steps:
@@ -55,7 +55,7 @@ jobs:
             - name: 'Lint Aura components'
               uses: forcedotcom/salesforcedx-actions@master
               with:
-                args: 'force:lightning:lint force-app/main/default/aura --exit'
+                  args: 'force:lightning:lint force-app/main/default/aura --exit'
 
             # Create scratch org
             - name: 'Create scratch org'
