@@ -1,12 +1,12 @@
 # Unique name for this workflow
-name: Salesforce DX CI
+name: Default CI
 
 # Definition when the workflow should run
 on:
     pull_request:
         types: [opened, synchronize, reopened]
         branches-ignore:
-            - 'prerelease/**'
+          - 'prerelease/**'
 
 # Jobs to be executed
 jobs:
