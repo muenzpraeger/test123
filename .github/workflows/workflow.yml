@@ -36,7 +36,8 @@ jobs:
         run: npm run test:unit:coverage
 
   dx-setup:
-      needs: formatting-and-linting
+    needs: formatting-and-linting
+    steps:    
       # Store secret for dev hub
       - name: 'Populate auth file with SFDX_URL secret'
         shell: bash
