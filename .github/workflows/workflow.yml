@@ -22,8 +22,7 @@ jobs:
 
   formatting-and-linting:
       needs: preparations
-      
-      # Prettier formatting
+
       - name: 'Code formatting verification with Prettier'
         run: npm run prettier:verify
 
