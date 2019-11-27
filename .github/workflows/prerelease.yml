@@ -1,12 +1,12 @@
 # Unique name for this workflow
-name: Salesforce DX CI
+name: Pre-release CI
 
 # Definition when the workflow should run
 on:
     pull_request:
         types: [opened, synchronize, reopened]
         branches:
-          - 'prerelease/**'
+            - 'prerelease/**'
 
 # Jobs to be executed
 jobs:
@@ -51,9 +51,9 @@ jobs:
             - name: 'Install salesforcedx pre-release plugin'
               uses: forcedotcom/salesforcedx-actions@master
               with:
-                args: |
-                  'plugins:uninstall salesforcedx'
-                  'plugins:install salesforcedx@pre-release'
+                  args: |
+                      'plugins:uninstall salesforcedx'
+                      'plugins:install salesforcedx@pre-release'
 
             # Authenticate dev hub
             - name: 'Authenticate Dev Hub'
