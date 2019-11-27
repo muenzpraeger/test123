@@ -48,13 +48,17 @@ jobs:
               shell: bash
               run: 'echo ${{ secrets.DEV_HUB_SFDXURL}} > ./SFDX_URL_STORE.txt'
 
-            # Use pre-release version of the salesforcedx plugins
+            # Uninstall current salesforcedx plugin
+            - name: 'Uninstall salesforcedx plugin'
+              uses: forcedotcom/salesforcedx-actions@master
+              with:
+                  args: 'plugins:uninstall salesforcedx'
+
+            # Install salesforcedx pre-release plugin
             - name: 'Install salesforcedx pre-release plugin'
               uses: forcedotcom/salesforcedx-actions@master
               with:
-                  args: |
-                      'plugins:uninstall salesforcedx'
-                      'plugins:install salesforcedx@pre-release'
+                  args: 'plugins:install salesforcedx@pre-release'
 
             # Authenticate dev hub
             - name: 'Authenticate Dev Hub'
