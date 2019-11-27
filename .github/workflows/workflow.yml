@@ -8,22 +8,18 @@ on:
 
 # Jobs to be executed
 jobs:
-  preparations:
+  formatting-and-linting:
     runs-on: ubuntu-latest
     steps:
+      # Checkout the code in the pull request
+      - uses: actions/checkout@v1
+
       # Install an action that provides access to node.js
       - uses: actions/setup-node@v1
 
       # Install npm dependencies for Prettier and Jest
       - name: 'Install npm dependencies'
         run: npm install
-
-  formatting-and-linting:
-    runs-on: ubuntu-latest
-    needs: preparations
-    steps:
-      # Checkout the code in the pull request
-      - uses: actions/checkout@v1
 
       # Prettier formatting
       - name: 'Code formatting verification with Prettier'
@@ -37,13 +33,13 @@ jobs:
       - name: 'Unit test Lightning Web Components'
         run: npm run test:unit:coverage
 
-  dx-setup:
+  dx:
     runs-on: ubuntu-latest
     needs: formatting-and-linting
     steps:    
       # Checkout the code in the pull request
       - uses: actions/checkout@v1
-      
+
       # Store secret for dev hub
       - name: 'Populate auth file with SFDX_URL secret'
         shell: bash
