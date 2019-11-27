@@ -11,9 +11,6 @@ jobs:
   preparations:
     runs-on: ubuntu-latest
     steps:
-      # Checkout the code in the pull request
-      - uses: actions/checkout@v1
-
       # Install an action that provides access to node.js
       - uses: actions/setup-node@v1
 
@@ -24,7 +21,10 @@ jobs:
   formatting-and-linting:
     runs-on: ubuntu-latest
     needs: preparations
-    steps:        
+    steps:
+      # Checkout the code in the pull request
+      - uses: actions/checkout@v1
+
       # Prettier formatting
       - name: 'Code formatting verification with Prettier'
         run: npm run prettier:verify
@@ -41,6 +41,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: formatting-and-linting
     steps:    
+      # Checkout the code in the pull request
+      - uses: actions/checkout@v1
+      
       # Store secret for dev hub
       - name: 'Populate auth file with SFDX_URL secret'
         shell: bash
