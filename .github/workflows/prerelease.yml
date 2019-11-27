@@ -1,10 +1,12 @@
 # Unique name for this workflow
-name: SFDX CI
+name: Salesforce DX CI
 
 # Definition when the workflow should run
 on:
     pull_request:
-        types: [assigned, opened, synchronize, reopened]
+        types: [opened, synchronize, reopened]
+        branches:
+          - 'prerelease/**'
 
 # Jobs to be executed
 jobs:
@@ -45,13 +47,21 @@ jobs:
               shell: bash
               run: 'echo ${{ secrets.DEV_HUB_SFDXURL}} > ./SFDX_URL_STORE.txt'
 
+            # Use pre-release version of the salesforcedx plugins
+            - name: 'Install salesforcedx pre-release plugin'
+              uses: forcedotcom/salesforcedx-actions@master
+              with:
+                args: |
+                  'plugins:uninstall salesforcedx'
+                  'plugins:install salesforcedx@pre-release'
+
             # Authenticate dev hub
             - name: 'Authenticate Dev Hub'
               uses: forcedotcom/salesforcedx-actions@master
               with:
                   args: 'force:auth:sfdxurl:store --sfdxurlfile=./SFDX_URL_STORE.txt --setalias=devhub --setdefaultdevhubusername'
 
-            # Lint Aura components (needs)
+            # Lint Aura components
             - name: 'Lint Aura components'
               uses: forcedotcom/salesforcedx-actions@master
               with:
@@ -69,8 +79,8 @@ jobs:
               with:
                   args: 'force:source:push -u scratch-org'
 
-            # Assign permission set
-            - name: 'Assign permission set to default user'
+            # Assign permissionset
+            - name: 'Assign permissionset to default user'
               uses: forcedotcom/salesforcedx-actions@master
               with:
                   args: 'force:user:permset:assign -n recipes'
