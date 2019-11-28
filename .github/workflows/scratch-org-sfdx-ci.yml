@@ -159,7 +159,9 @@ jobs:
             - name: 'Test package version creation status'
               if: steps.package-version.outputs.result.status != 1
               run: |
-                  echo ${{ steps.package-version.outputs.result }}
+                  echo ${{ steps.package-version.outputs.result.status }}
+                  echo ${{ toJSON(steps.package-version.outputs.result }}
+                  echo ${{ toJSON(steps.package-version.outputs.result }}.status
                   exit 1
 
             # Wait for package version replication
