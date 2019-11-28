@@ -17,6 +17,7 @@ jobs:
 
             # Cache node_modules to speed up the process
             - name: Cache node modules
+              id: cache-npm
               uses: actions/cache@v1
               with:
                   path: node_modules
@@ -25,12 +26,9 @@ jobs:
                       npm-${{ env.cache-name }}-
                       npm-
 
-            # # Install an action that provides access to node.js
-            # - name: 'Install node.js'
-            #   uses: actions/setup-node@v1
-
             # Install npm dependencies for Prettier and Jest
             - name: 'Install npm dependencies'
+              if: steps.cache-npm.outputs.cache-hit != 'true'
               run: npm install
 
             # Prettier formatting
@@ -45,7 +43,7 @@ jobs:
             - name: 'Unit test Lightning Web Components'
               run: npm run test:unit:coverage
 
-    salesforce-dx:
+    scratch-org-test:
         runs-on: ubuntu-latest
         needs: formatting-and-linting
         steps:
@@ -61,15 +59,15 @@ jobs:
                   args: 'plugins:install salesforcedx@pre-release'
 
             # Store secret for dev hub
-            - name: 'Populate auth file with SFDX_URL secret'
+            - name: 'Populate auth file with DEVHUB_SFDX_URL secret'
               shell: bash
-              run: 'echo ${{ secrets.DEV_HUB_SFDXURL}} > ./SFDX_URL_STORE.txt'
+              run: 'echo ${{ secrets.DEVHUB_SFDX_URL}} > ./DEVHUB_SFDX_URL.txt'
 
             # Authenticate dev hub
             - name: 'Authenticate Dev Hub'
               uses: forcedotcom/salesforcedx-actions@master
               with:
-                  args: 'force:auth:sfdxurl:store --sfdxurlfile=./SFDX_URL_STORE.txt --setalias=devhub --setdefaultdevhubusername'
+                  args: 'force:auth:sfdxurl:store --sfdxurlfile=./DEVHUB_SFDX_URL.txt --setalias=devhub --setdefaultdevhubusername'
 
             # Lint Aura components
             - name: 'Lint Aura components'
@@ -81,7 +79,7 @@ jobs:
             - name: 'Create scratch org'
               uses: forcedotcom/salesforcedx-actions@master
               with:
-                  args: 'force:org:create -f config/project-scratch-def.json -a scratch-org -s'
+                  args: 'force:org:create -f config/project-scratch-def.json -a scratch-org -s -d 1'
 
             # Deploy source to scratch org
             - name: 'Push source to scratch org'
@@ -112,3 +110,53 @@ jobs:
               uses: forcedotcom/salesforcedx-actions@master
               with:
                   args: 'force:org:delete -p -u scratch-org'
+
+    packaging-test:
+        runs-on: ubuntu-latest
+        needs: scratch-org-test
+        steps:
+            # Checkout the code in the pull request
+            - name: 'Checkout source code'
+              uses: actions/checkout@v1
+
+            # Install salesforcedx pre-release plugin
+            - name: 'Install salesforcedx pre-release plugin'
+              uses: forcedotcom/salesforcedx-actions@master
+              if: startsWith(github.head_ref, 'prerelease')
+              with:
+                  args: 'plugins:install salesforcedx@pre-release'
+
+            # Store secret for dev hub
+            - name: 'Populate auth file with DEVHUB_SFDX_URL secret'
+              shell: bash
+              run: 'echo ${{ secrets.DEVHUB_SFDX_URL}} > ./DEVHUB_SFDX_URL.txt'
+
+            # Store secret for package target org installation
+            - name: 'Populate auth file with PACKAGING_SFDX_URL secret'
+              shell: bash
+              run: 'echo ${{ secrets.PACKAGING_SFDX_URL}} > ./PACKAGING_SFDX_URL.txt'
+
+            # Authenticate dev hub
+            - name: 'Authenticate Dev Hub'
+              uses: forcedotcom/salesforcedx-actions@master
+              with:
+                  args: 'force:auth:sfdxurl:store --sfdxurlfile=./DEVHUB_SFDX_URL.txt --setalias=devhub --setdefaultdevhubusername'
+
+            # Authenticate package target org
+            - name: 'Authenticate package target org'
+              uses: forcedotcom/salesforcedx-actions@master
+              with:
+                  args: 'force:auth:sfdxurl:store --sfdxurlfile=./PACKAGING_SFDX_URL.txt --setalias=packagingorg --setdefaultusername'
+
+            # Create package version
+            - name: 'Create package version'
+              id: package-version
+              uses: forcedotcom/salesforcedx-actions@master
+              with:
+                  args: 'force:package:version:create -p LWCRecipes -x -w 10 --json'
+
+            # Test if package version creation was successful, otherwise fail the workflow
+            - name: 'Test package version creation status'
+              if: steps.package-version.output.result != 1
+              run: |
+                echo steps.package-version.output.result
