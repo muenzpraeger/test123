@@ -1,5 +1,5 @@
 # Unique name for this workflow
-name: Salesforce DX CI
+name: Salesforce DX CI (scratch org only)
 
 # Definition when the workflow should run
 on:
@@ -158,7 +158,9 @@ jobs:
             # Test if package version creation was successful, otherwise fail the workflow
             - name: 'Test package version creation status'
               if: steps.package-version.output.result.status != 1
-              run: exit 1
+              run: |
+                  echo ${{ steps.package-version.output.result }}
+                  exit 1
 
             # Wait for package version replication
             - name: 'Wait'
