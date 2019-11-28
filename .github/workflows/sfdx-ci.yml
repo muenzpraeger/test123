@@ -163,7 +163,8 @@ jobs:
             # Wait for package version replication
             - name: 'Wait'
               uses: maddox/actions/sleep@master
-              args: 300
+              with:
+                  args: 300
 
             # Run package test installation
             - name: 'Install new package version into test environment'
