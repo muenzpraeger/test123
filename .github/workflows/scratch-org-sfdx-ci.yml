@@ -160,7 +160,6 @@ jobs:
               if: steps.package-version.outputs.result.status > 0
               run: |
                   echo ${{ steps.package-version.outputs.result.status }}
-                  exit 1
 
             # Wait for package version replication
             - name: 'Wait'
