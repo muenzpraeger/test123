@@ -1,5 +1,5 @@
 # Unique name for this workflow
-name: Default CI
+name: Salesforce DX CI
 
 # Definition when the workflow should run
 on:
@@ -15,9 +15,19 @@ jobs:
             - name: 'Checkout source code'
               uses: actions/checkout@v1
 
-            # Install an action that provides access to node.js
-            - name: 'Install node.js'
-              uses: actions/setup-node@v1
+            # Cache node_modules to speed up the process
+            - name: Cache node modules
+              uses: actions/cache@v1
+              with:
+                path: node_modules
+                key: npm-${{ hashFiles('**/package-lock.json') }}
+                restore-keys: |
+                  npm-${{ env.cache-name }}-
+                  npm-
+
+            # # Install an action that provides access to node.js
+            # - name: 'Install node.js'
+            #   uses: actions/setup-node@v1
 
             # Install npm dependencies for Prettier and Jest
             - name: 'Install npm dependencies'
