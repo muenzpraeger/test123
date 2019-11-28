@@ -1,13 +1,10 @@
 # Unique name for this workflow
-name: Pre-release CI
+name: Default CI
 
 # Definition when the workflow should run
 on:
     pull_request:
         types: [opened, synchronize, reopened]
-        branches:
-            - 'prerelease/**'
-            - master
 
 # Jobs to be executed
 jobs:
@@ -15,10 +12,12 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             # Checkout the code in the pull request
-            - uses: actions/checkout@v1
+            - name: 'Checkout source code'
+              uses: actions/checkout@v1
 
             # Install an action that provides access to node.js
-            - uses: actions/setup-node@v1
+            - name: 'Install node.js'
+              uses: actions/setup-node@v1
 
             # Install npm dependencies for Prettier and Jest
             - name: 'Install npm dependencies'
@@ -41,7 +40,15 @@ jobs:
         needs: formatting-and-linting
         steps:
             # Checkout the code in the pull request
-            - uses: actions/checkout@v1
+            - name: 'Checkout source code'
+              uses: actions/checkout@v1
+
+            # Install salesforcedx pre-release plugin
+            - name: 'Install salesforcedx pre-release plugin'
+              uses: forcedotcom/salesforcedx-actions@master
+              if: startsWith(github.head_ref, 'prerelease')
+              with:
+                  args: 'plugins:install salesforcedx@pre-release'
 
             # Store secret for dev hub
             - name: 'Populate auth file with SFDX_URL secret'
