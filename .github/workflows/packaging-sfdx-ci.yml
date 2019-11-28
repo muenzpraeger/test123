@@ -159,7 +159,21 @@ jobs:
 
             # Test if package version creation was successful, otherwise fail the workflow
             - name: 'Test package version creation status'
-              run: echo ${{ steps.package-version.outputs.result }}
+              run: |
+                  echo "aa"
+                  echo ${{ steps.package-version.outputs.result }}
+                  echo "bb"
+                  echo ${{ steps.package-version.outputs.result.status }}
+                  echo "cc"
+                  echo ${{ steps.package-version.outputs.result.result }}
+                  echo "dd"
+                  echo ${{ steps.package-version.outputs.result.Id }}
+                  echo "ee"
+                  echo ${{ steps.package-version.outputs.result.result.Id }}
+                  echo "ff"
+                  echo ${{ steps.package-version.outputs.result.result.SubscriberPackageVersionId }}
+                  echo "gg"
+                  echo steps.package-version.outputs.result
 
             # Wait for package version replication
             - name: 'Wait'
