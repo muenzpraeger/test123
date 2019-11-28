@@ -157,6 +157,17 @@ jobs:
 
             # Test if package version creation was successful, otherwise fail the workflow
             - name: 'Test package version creation status'
-              if: steps.package-version.output.result != 1
-              run: |
-                  echo steps.package-version.output.result
+              if: steps.package-version.output.result.status != 1
+              run: exit 1
+
+            # Run package test installation
+            - name: 'Test package version creation status'
+              id: package-installation
+              uses: forcedotcom/salesforcedx-actions@master
+              with:
+                  args: 'force:package:install --package ${{ steps.package-version.output.result.result.SubscriberPackageVersionId }} -w 10 -u packagingorg -r'
+
+            # Test if package version installation was successful, otherwise fail the workflow
+            - name: 'Test package version installation status'
+              if: steps.package-installation.output.result.status != 1
+              run: exit 1
