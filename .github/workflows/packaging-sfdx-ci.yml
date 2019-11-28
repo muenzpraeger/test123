@@ -163,17 +163,15 @@ jobs:
                   echo "aa"
                   echo ${{ steps.package-version.outputs.result }}
                   echo "bb"
-                  echo ${{ steps.package-version.outputs.result.status }}
+                  echo $JSON_RESULT
                   echo "cc"
-                  echo ${{ steps.package-version.outputs.result.result }}
+                  echo $JSON_RESULT.result
                   echo "dd"
-                  echo ${{ steps.package-version.outputs.result.Id }}
-                  echo "ee"
-                  echo ${{ steps.package-version.outputs.result.result.Id }}
+                  echo $JSON_RESULT.status
                   echo "ff"
-                  echo ${{ steps.package-version.outputs.result.result.SubscriberPackageVersionId }}
-                  echo "gg"
-                  echo steps.package-version.outputs.result
+                  echo $JSON_RESULT.result.SubscriberPackageVersionId
+              env:
+                  JSON_RESULT: ${{ toJson(steps.package-version.outputs.result) }}
 
             # Wait for package version replication
             - name: 'Wait'
