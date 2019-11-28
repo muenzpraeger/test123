@@ -40,6 +40,13 @@ jobs:
             # Checkout the code in the pull request
             - uses: actions/checkout@v1
 
+            # Install salesforcedx pre-release plugin
+            - name: 'Install salesforcedx pre-release plugin'
+              uses: forcedotcom/salesforcedx-actions@master
+              if: {{ startsWith(github.head_ref, 'prerelease') }}
+              with:
+                  args: 'plugins:install salesforcedx@pre-release'
+
             # Store secret for dev hub
             - name: 'Populate auth file with SFDX_URL secret'
               shell: bash
