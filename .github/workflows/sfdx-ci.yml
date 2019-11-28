@@ -110,7 +110,7 @@ jobs:
               uses: forcedotcom/salesforcedx-actions@master
               with:
                   args: 'force:org:delete -p -u scratch-org'
-                  
+
     packaging:
         runs-on: ubuntu-latest
         needs: scratch-org-test
