@@ -160,8 +160,13 @@ jobs:
               if: steps.package-version.output.result.status != 1
               run: exit 1
 
+            # Wait for package version replication
+            - name: 'Wait'
+              uses: maddox/actions/sleep@master
+              args: 300
+
             # Run package test installation
-            - name: 'Test package version creation status'
+            - name: 'Install new package version into test environment'
               id: package-installation
               uses: forcedotcom/salesforcedx-actions@master
               with:
