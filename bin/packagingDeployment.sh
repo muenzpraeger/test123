@@ -9,7 +9,7 @@ RESULT=0
 # Defining Salesforce CLI exec, depending if it's CI or local dev machine
 if [ $CI ]; then
   echo "Script is running on CI"
-  SFDX_CLI_EXEC=node_modules/sfdx-cli/bin/run
+  SFDX_CLI_EXEC=
   TARGET_ORG="packagingorg"
 fi
 
