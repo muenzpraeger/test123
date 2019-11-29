@@ -45,18 +45,16 @@ jobs:
                   args: 'force:org:display -u devhub --json'
 
             # Test if package version creation was successful, otherwise fail the workflow
-            - name: 'Test package version creation status'
-              id: test2
-              run: |
-                  echo "aa"
-                  echo ${{ steps.package-version.outputs.result }} | jq '.status'
-                  echo "bb"
-                  echo $JSON_RESULT_1 | jq '.status'
-                  echo "cc"
-                  echo $JSON_RESULT_2 
-                  echo "cc"
-                  echo $JSON_RESULT_3 
-              env:
-                  JSON_RESULT_1: ${{ steps.org-data.outputs.result }}
-                  JSON_RESULT_2: ${{ steps.org-data.outputs.result.status }}
-                  JSON_RESULT_3: steps.org-data.outputs.result.status
+            - name: 'Extract data'
+              id: extract-data
+              uses: ./.github/actions/extract-packaging-results
+              with:
+                json: steps.org-data.outputs.result
+            
+            - name: 'Was success'
+              if: steps.extract-data.outputs.isSuccess
+              runs: echo "Success"
+
+            - name: 'Was error'
+              if: !steps.extract-data.outputs.isSuccess
+              runs: echo "Error"
