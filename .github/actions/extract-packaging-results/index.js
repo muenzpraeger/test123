@@ -5,6 +5,8 @@ async function run() {
         console.log(core.getInput('json'));
         const jsonResponse = core.getInput('json');
         core.info('Status is: ' + jsonResponse);
+        core.info('Status is: ' + jsonResponse.status);
+        core.info('Username is: ' + jsonResponse.result.username);
         core.setOutput('status', jsonResponse.status === 0 ? true : false);
     } catch (error) {
         core.setFailed(error.message);
