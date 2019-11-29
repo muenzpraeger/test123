@@ -1,20 +1,20 @@
 {
-  "name": "extract-packaging-results",
-  "version": "1.0.0",
-  "description": "Extracts JSON data from the sfdx force:package:version:create command",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [
-    "github",
-    "actions"
-  ],
-  "author": "muenzpraeger",
-  "license": "CC0",
-  "dependencies": {
-    "@actions/core": "^1.1.3",
-    "@actions/github": "^1.1.0"
-  }
+    "name": "extract-packaging-results",
+    "version": "1.0.0",
+    "description": "Extracts JSON data from the sfdx force:package:version:create command",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [
+        "github",
+        "actions"
+    ],
+    "author": "muenzpraeger",
+    "license": "CC0",
+    "dependencies": {
+        "@actions/core": "^1.1.3",
+        "@actions/github": "^1.1.0"
+    }
 }
