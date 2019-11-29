@@ -164,6 +164,12 @@ jobs:
               with:
                   json: ${{steps.package-version-create.outputs.result}}
 
+            # Extract data from package version create result
+            - name: 'Wait for package replication'
+              uses: maddox/actions/sleep@master
+              with:
+                  args: 300
+
             - name: 'Install new package version into test org'
               if: steps.extract-data-package-version-create.outputs.isSuccess
               uses: forcedotcom/salesforcedx-actions@master
