@@ -8,7 +8,7 @@ on:
         branches:
             - master
         paths:
-            - 'force-app/*'
+            - 'force-app/**'
 
 # Jobs to be executed
 jobs:
