@@ -150,31 +150,36 @@ jobs:
               with:
                   args: 'force:auth:sfdxurl:store --sfdxurlfile=./PACKAGING_SFDX_URL.txt --setalias=packagingorg --setdefaultusername'
 
-            # Create package version
+            # Authenticate package target org
             - name: 'Create package version'
-              id: package-version
+              id: package-version-create
               uses: forcedotcom/salesforcedx-actions@master
               with:
-                  args: 'force:package:version:create -p LWCRecipes -x -w 10 --json'
+                  args: 'force:package:version:create -p LWCRecipes -x -w 20 --json'
 
-            # Test if package version creation was successful, otherwise fail the workflow
-            - name: 'Test package version creation status'
-              run: echo ${{ steps.package-version.outputs.result }}
+            # Extract data from package version create result
+            - name: 'Extract package:version:create result data'
+              id: extract-data-package-version-create
+              uses: muenzpraeger/github-action-extract-sfdx-packaging-result@master
+              with:
+                  json: ${{steps.package-version-create.outputs.result}}
 
-            # Wait for package version replication
-            - name: 'Wait'
+            # Extract data from package version create result
+            - name: 'Wait for package replication'
               uses: maddox/actions/sleep@master
               with:
                   args: 300
 
-            # Run package test installation
-            - name: 'Install new package version into test environment'
-              id: package-installation
+            - name: 'Install new package version into test org'
+              if: steps.extract-data-package-version-create.outputs.isSuccess
               uses: forcedotcom/salesforcedx-actions@master
               with:
-                  args: 'force:package:install --package ${{ steps.package-version.outputs.result.result.SubscriberPackageVersionId }} -w 10 -u packagingorg -r'
+                  args: 'force:package:install --package ${{ steps.extract-data-package-version-create.outputs.packageVersionId }} -w 10 -u packagingorg -r'
 
-            # Test if package version installation was successful, otherwise fail the workflow
-            - name: 'Test package version installation status'
-              if: steps.package-installation.outputs.result.status != 1
-              run: exit 1
+            - name: 'Add new package version to source'
+              uses: Automattic/action-commit-to-branch@master
+              with:
+                  branch: ${{ github.head_ref }}
+                  commit_message: 'Added new package version ID'
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
