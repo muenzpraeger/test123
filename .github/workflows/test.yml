@@ -1,0 +1,56 @@
+# Unique name for this workflow
+name: Salesforce DX CI (packaging)
+
+# Definition when the workflow should run
+on:
+    pull_request:
+        types: [opened, synchronize, reopened]
+
+# Jobs to be executed
+jobs:
+  
+    scratch-org-test:
+        runs-on: ubuntu-latest
+        needs: formatting-and-linting
+        steps:
+            # Checkout the code in the pull request
+            - name: 'Checkout source code'
+              uses: actions/checkout@v1
+
+            # Install salesforcedx pre-release plugin
+            - name: 'Install salesforcedx pre-release plugin'
+              uses: forcedotcom/salesforcedx-actions@master
+              if: startsWith(github.head_ref, 'prerelease')
+              with:
+                  args: 'plugins:install salesforcedx@pre-release'
+
+            # Store secret for dev hub
+            - name: 'Populate auth file with DEVHUB_SFDX_URL secret'
+              shell: bash
+              run: 'echo ${{ secrets.DEVHUB_SFDX_URL}} > ./DEVHUB_SFDX_URL.txt'
+
+            # Authenticate dev hub
+            - name: 'Authenticate Dev Hub'
+              uses: forcedotcom/salesforcedx-actions@master
+              with:
+                  args: 'force:auth:sfdxurl:store --sfdxurlfile=./DEVHUB_SFDX_URL.txt --setalias=devhub --setdefaultdevhubusername'
+
+            # Lint Aura components
+            - name: 'Show org data'
+              uses: forcedotcom/salesforcedx-actions@master
+              id: org-data
+              with:
+                  args: 'force:org:display -u devhub --json'
+
+            # Test if package version creation was successful, otherwise fail the workflow
+            - name: 'Test package version creation status'
+              run: |
+                  echo "aa"
+                  echo ${{ steps.package-version.outputs.result }} | jq '.status'
+                  echo "bb"
+                  echo $JSON_RESULT_1
+                  echo "cc"
+                  echo $JSON_RESULT.result_2
+              env:
+                  JSON_RESULT_1: ${{ steps.package-version.outputs.result }}
+                  JSON_RESULT_2: ${{ toJson(steps.package-version.outputs.result) }}
