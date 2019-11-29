@@ -48,12 +48,8 @@ jobs:
                   echo "bb"
                   echo $JSON_RESULT_1 | jq '.status'
                   echo "bb"
-                  echo $JSON_RESULT_2 | jq '.status'
+                  echo ${{ steps.org-data.outputs.result }} | jq '.result.SubscriberPackageVersionId'
                   echo "cc"
-                  echo $JSON_RESULT_2
-                  echo "dd"
-                  echo $JSON_RESULT_3
+                  echo $JSON_RESULT_1 | jq '.result.SubscriberPackageVersionId'
               env:
                   JSON_RESULT_1: ${{ steps.org-data.outputs.result }}
-                  JSON_RESULT_2: ${{ toJson(steps.org-data.outputs.result) }}
-                  JSON_RESULT_3: ${{ steps.org-data.outputs.result }} | jq '.status'
