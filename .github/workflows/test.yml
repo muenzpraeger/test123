@@ -54,16 +54,13 @@ jobs:
                   echo $JSON_RESULT_1 | jq '.status'
                   echo "cc"
                   echo $JSON_RESULT_1 | jq '.result.username'
-                  export PACKAGE_VERSION_RESULT = $JSON_RESULT_1
-                  export PACKAGE_VERSION_USERNAME = $JSON_RESULT_1 | jq '.result.username'
-                  export BLUBBER = $JSON_RESULT_1 | jq '.result.username'
-                  echo "::set-env name=BLIBBER::$BLUBBER"
-                  echo "::set-env name=blebber::$BLUBBER"
+                  PACKAGE_VERSION_RESULT=$JSON_RESULT_1
+                  PACKAGE_VERSION_USERNAME=$JSON_RESULT_1 | jq '.result.username'
               env:
                   JSON_RESULT_1: ${{ steps.org-data.outputs.result }}
             # Test if package version creation was successful, otherwise fail the workflow
             - name: 'Test2'
               run: |
-                  echo $BLIBBER
+                  echo $PACKAGE_VERSION_RESULT
                   echo $PACKAGE_VERSION_USERNAME
                   echo {{ steps.test2.env.blebber }}
