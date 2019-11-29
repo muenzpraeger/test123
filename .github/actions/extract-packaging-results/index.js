@@ -7,6 +7,7 @@ async function run() {
         if (jsonResponse.status > 0) {
             core.setFailed(jsonResponse.result.ErrorMessages);
         }
+        console.log(jsonResponse.status === 0 ? true : false);
         core.setOutput('isSuccess', jsonResponse.status === 0 ? true : false);
         core.setOutput(
             'packageVersionId',
@@ -14,7 +15,7 @@ async function run() {
         );
         core.info(
             'Package Version Id: ' +
-                jsonResponse.result.SubscriberPackageVersion
+                jsonResponse.result.SubscriberPackageVersionId
         );
     } catch (error) {
         core.setFailed(error.message);
