@@ -49,12 +49,12 @@ jobs:
               id: extract-data
               uses: ./.github/actions/extract-packaging-results
               with:
-                json: steps.org-data.outputs.result
-            
+                  json: steps.org-data.outputs.result
+
             - name: 'Was success'
               if: steps.extract-data.outputs.isSuccess
-              runs: echo "Success"
+              run: echo "Success"
 
             - name: 'Was error'
               if: !steps.extract-data.outputs.isSuccess
-              runs: echo "Error"
+              run: echo "Error"
