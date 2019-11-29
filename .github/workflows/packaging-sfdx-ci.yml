@@ -160,7 +160,7 @@ jobs:
             # Extract data from package version create result
             - name: 'Extract package:version:create result data'
               id: extract-data-package-version-create
-              uses: ./.github/actions/extract-packaging-results
+              uses: muenzpraeger/github-action-extract-sfdx-packaging-result
               with:
                   json: ${{steps.package-version-create.outputs.result}}
 
@@ -176,4 +176,4 @@ jobs:
                   branch: ${{ github.head_ref }}
                   commit_message: 'Added new package version ID'
               env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Required
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
