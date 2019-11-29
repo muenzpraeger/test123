@@ -54,7 +54,3 @@ jobs:
             - name: 'Was success'
               if: steps.extract-data.outputs.isSuccess
               run: echo "Success"
-
-            - name: 'Was error'
-              if: !steps.extract-data.outputs.isSuccess
-              run: echo "Error"
