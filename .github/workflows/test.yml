@@ -6,11 +6,12 @@ on:
     pull_request:
         types: [opened, synchronize, reopened]
 
+env:
+    PACKAGE_VERSION_RESULT: ''
+    PACKAGE_VERSION_USERNAME: ''
+
 # Jobs to be executed
 jobs:
-    env:
-        PACKAGE_VERSION_RESULT: ""
-        PACKAGE_VERSION_USERNAME: ""
     scratch-org-test:
         runs-on: ubuntu-latest
         steps:
