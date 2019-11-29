@@ -158,15 +158,22 @@ jobs:
                   args: 'force:package:version:create -p LWCRecipes -x -w 10 --json'
 
             # Extract data from package version create result
-            - name: 'Extract package version create result data'
+            - name: 'Extract package:version:create result data'
               id: extract-data-package-version-create
               uses: ./.github/actions/extract-packaging-results
               with:
                   json: ${{steps.package-version-create.outputs.result}}
 
-            - name: 'Install package version into test org'
-              if: steps.extract-data.outputs.isSuccess
-              id: package-version-install
+            - name: 'Install new package version into test org'
+              if: steps.extract-data-package-version-create.outputs.isSuccess
               uses: forcedotcom/salesforcedx-actions@master
               with:
                   args: 'force:package:install --package ${{ steps.extract-data-package-version-create.outputs.packageVersionId }} -w 10 -u packagingorg -r'
+
+            - name: 'Add new package version to source'
+              uses: Automattic/action-commit-to-branch@master
+              with:
+                  branch: ${{ github.head_ref }}
+                  commit_message: 'Added new package version ID'
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Required
