@@ -1,6 +1,6 @@
 # Lightning Web Components Recipes
 
-[![Github Workflow](https://github.com/muenzpraeger/test123/workflows/scratch-org-sfdx-ci/badge.svg)](https://github.com/muenzpraeger/test123/actions) [![codecov](https://codecov.io/gh/trailheadapps/lwc-recipes/branch/master/graph/badge.svg)](https://codecov.io/gh/trailheadapps/lwc-recipes)
+[![Github Workflow](https://github.com/muenzpraeger/test123/workflows/.github/workflows/scratch-org-sfdx-ci.yml/badge.svg)](https://github.com/muenzpraeger/test123/actions) [![codecov](https://codecov.io/gh/trailheadapps/lwc-recipes/branch/master/graph/badge.svg)](https://codecov.io/gh/trailheadapps/lwc-recipes)
 
 ![recipes-logo](recipes-logo.png)
 
