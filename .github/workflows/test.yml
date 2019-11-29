@@ -42,6 +42,7 @@ jobs:
 
             # Test if package version creation was successful, otherwise fail the workflow
             - name: 'Test package version creation status'
+              id: test2
               run: |
                   echo "aa"
                   echo ${{ steps.package-version.outputs.result }} | jq '.status'
@@ -49,5 +50,14 @@ jobs:
                   echo $JSON_RESULT_1 | jq '.status'
                   echo "cc"
                   echo $JSON_RESULT_1 | jq '.result.username'
+                  BLUBBER = $JSON_RESULT_1 | jq '.result.username'
+                  ::set-env name=BLIBBER::$BLUBBER
+                  ::set-env name=blebber::$BLUBBER
               env:
                   JSON_RESULT_1: ${{ steps.org-data.outputs.result }}
+            # Test if package version creation was successful, otherwise fail the workflow
+            - name: 'Test2'
+              run: |
+                  echo $BLIBBER
+                  echo {{ steps.test2.env.blebber }}
+
