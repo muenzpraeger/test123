@@ -46,7 +46,9 @@ jobs:
                   echo "aa"
                   echo ${{ steps.package-version.outputs.result }} | jq '.status'
                   echo "bb"
-                  echo $JSON_RESULT_1
+                  echo $JSON_RESULT_1 | jq '.status'
+                  echo "bb"
+                  echo $JSON_RESULT_2 | jq '.status'
                   echo "cc"
                   echo $JSON_RESULT_2
                   echo "dd"
