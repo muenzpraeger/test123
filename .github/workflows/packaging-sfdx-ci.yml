@@ -84,9 +84,11 @@ jobs:
               with:
                   args: 'force:auth:sfdxurl:store --sfdxurlfile=./PACKAGING_SFDX_URL.txt --setalias=packagingorg --setdefaultusername'
 
-            # Run git stash to reset source
-            - name: 'Run git stash'
-              run: git stash
+            # Remove auth files
+            - name: 'Remove auth files'
+              run: |
+                  rm -f ./DEVHUB_SFDX_URL.txt
+                  rm -f ./PACKAGING_SFDX_URL.txt
 
             # Authenticate package target org
             - name: 'Create package version'
