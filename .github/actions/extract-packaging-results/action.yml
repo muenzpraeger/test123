@@ -4,7 +4,6 @@ author: muenzpraeger
 inputs:
     json:
         description: JSON output of package version create command
-        default: {}
         required: true
 outputs:
     errorMessages:
