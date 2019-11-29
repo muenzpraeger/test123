@@ -150,6 +150,23 @@ jobs:
               with:
                   args: 'force:auth:sfdxurl:store --sfdxurlfile=./PACKAGING_SFDX_URL.txt --setalias=packagingorg --setdefaultusername'
 
-            # Create package version
+            # Authenticate package target org
             - name: 'Create package version'
-              run: bin/packagingDeployment.sh
+              id: package-version-create
+              uses: forcedotcom/salesforcedx-actions@master
+              with:
+                  args: 'force:package:version:create -p LWCRecipes -x -w 10 --json'
+
+            # Extract data from package version create result
+            - name: 'Extract package version create result data'
+              id: extract-data-package-version-create
+              uses: ./.github/actions/extract-packaging-results
+              with:
+                  json: ${{steps.package-version-create.outputs.result}}
+
+            - name: 'Install package version into test org'
+              if: steps.extract-data.outputs.isSuccess
+              id: package-version-install
+              uses: forcedotcom/salesforcedx-actions@master
+              with:
+                  args: 'force:package:install --package ${{ steps.extract-data-package-version-create.outputs.packageVersionId }} -w 10 -u packagingorg -r'
