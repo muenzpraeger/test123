@@ -8,6 +8,9 @@ on:
 
 # Jobs to be executed
 jobs:
+    env:
+        PACKAGE_VERSION_RESULT: ""
+        PACKAGE_VERSION_USERNAME: ""
     scratch-org-test:
         runs-on: ubuntu-latest
         steps:
@@ -50,7 +53,9 @@ jobs:
                   echo $JSON_RESULT_1 | jq '.status'
                   echo "cc"
                   echo $JSON_RESULT_1 | jq '.result.username'
-                  BLUBBER = $JSON_RESULT_1 | jq '.result.username'
+                  export PACKAGE_VERSION_RESULT = $JSON_RESULT_1
+                  export PACKAGE_VERSION_USERNAME = $JSON_RESULT_1 | jq '.result.username'
+                  export BLUBBER = $JSON_RESULT_1 | jq '.result.username'
                   echo "::set-env name=BLIBBER::$BLUBBER"
                   echo "::set-env name=blebber::$BLUBBER"
               env:
@@ -59,4 +64,5 @@ jobs:
             - name: 'Test2'
               run: |
                   echo $BLIBBER
+                  echo $PACKAGE_VERSION_USERNAME
                   echo {{ steps.test2.env.blebber }}
