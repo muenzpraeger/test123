@@ -47,8 +47,6 @@ jobs:
                   echo ${{ steps.package-version.outputs.result }} | jq '.status'
                   echo "bb"
                   echo $JSON_RESULT_1 | jq '.status'
-                  echo "bb"
-                  echo ${{ steps.org-data.outputs.result }} | jq '.result.username'
                   echo "cc"
                   echo $JSON_RESULT_1 | jq '.result.username'
               env:
