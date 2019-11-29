@@ -155,7 +155,7 @@ jobs:
               id: package-version-create
               uses: forcedotcom/salesforcedx-actions@master
               with:
-                  args: 'force:package:version:create -p LWCRecipes -x -w 10 --json'
+                  args: 'force:package:version:create -p LWCRecipes -x -w 20 --json'
 
             # Extract data from package version create result
             - name: 'Extract package:version:create result data'
