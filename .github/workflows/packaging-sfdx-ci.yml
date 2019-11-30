@@ -120,7 +120,7 @@ jobs:
             # Update sfdx-project.json and README to use only latest package version
             - name: 'Update sfdx-project.json and README'
               id: packaging-updater
-              uses: muenzpraeger/github-action-sfdx-packaging-updater
+              uses: muenzpraeger/github-action-sfdx-packaging-updater@master
 
             # Re-add changes back to source
             - name: 'Add new package version, updated sfdx-project.json and README to source'
