@@ -124,7 +124,7 @@ jobs:
 
             # Re-add changes back to source
             - name: 'Add new package version, updated sfdx-project.json and README to source'
-              if: packaging-updater.outputs.isSuccess
+              if: steps.packaging-updater.outputs.isSuccess
               uses: Automattic/action-commit-to-branch@master
               with:
                   branch: ${{ github.head_ref }}
