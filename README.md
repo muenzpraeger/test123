@@ -1,6 +1,6 @@
 # Lightning Web Components Recipes
 
-[![Github Workflow](https://github.com/muenzpraeger/test123/workflows/Salesforce%20DX%20CI%20(scratch%20org%20only)/badge.svg)](https://github.com/muenzpraeger/test123/actions) [![codecov](https://codecov.io/gh/trailheadapps/lwc-recipes/branch/master/graph/badge.svg)](https://codecov.io/gh/trailheadapps/lwc-recipes)
+[![Github Workflow](<https://github.com/muenzpraeger/test123/workflows/Salesforce%20DX%20CI%20(scratch%20org%20only)/badge.svg>)](https://github.com/muenzpraeger/test123/actions) [![codecov](https://codecov.io/gh/trailheadapps/lwc-recipes/branch/master/graph/badge.svg)](https://codecov.io/gh/trailheadapps/lwc-recipes)
 
 ![recipes-logo](recipes-logo.png)
 
@@ -81,7 +81,7 @@ sfdx force:org:open
 
 2. Enable MyDomain in your DE org. Instructions to do this are [here](https://trailhead.salesforce.com/modules/identity_login/units/identity_login_my_domain).
 
-3. Click [this link](https://login.salesforce.com/packaging/installPackage.apexp?p0=04tB0000000OEEdIAO) to install the Recipes unlocked package in your DE org.
+3. Click [this link](https://login.salesforce.com/packaging/installPackage.apexp?p0=04tB0000000ORSDIA4) to install the Recipes unlocked package in your DE org.
 
 4. Select **Install for All Users**
 
