@@ -1,0 +1,24 @@
+# Unique name for this workflow
+name: Salesforce DX CI (packaging)
+
+# Definition when the workflow should run
+on:
+    pull_request:
+        types: [opened, synchronize, reopened]
+        branches:
+            - nada
+        paths:
+            - 'force-app/**'
+
+# Jobs to be executed
+jobs:
+    formatting-and-linting:
+        runs-on: ubuntu-latest
+        steps:
+            # Checkout the code in the pull request
+            - name: 'Checkout source code'
+              uses: actions/checkout@v1
+
+            # Cache node_modules to speed up the process
+            - name: Restore node_modules cache
+              uses: muenzpraeger/github-action-sfdx-packaging-updater@master
