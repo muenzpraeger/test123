@@ -27,7 +27,7 @@ jobs:
             - name: Install Salesforce CLI
               run: |
                   mkdir ~/.npm-global
-                  NPM_CONFIG_PREFIX=~/.npm-global
+                  npm config set prefix ~/.npm-global
                   npm install -g sfdx-cli
 
             # # Do pre-rel stuff
