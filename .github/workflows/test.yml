@@ -57,8 +57,10 @@ jobs:
                   echo ${{ steps.test-with-json.outputs.blubber }}
                   echo "I am here"
                   echo ${{ steps.test-with-json.outputs.result }}
-                  echo "unfiltered"
-                  echo ${{ steps.test-with-json.outputs.unfiltered }}
+                  echo "unfiltered with jq"
+                  echo $(${{ steps.test-with-json.outputs.unfiltered }} | jq .status)
+                  echo "unfiltered without jq"
+                  echo $(${{ steps.test-with-json.outputs.unfiltered }})
                   echo "My name is master"
                   echo $(echo ${{ steps.test-with-json.outputs.result }} | jq '.status')
                   echo "More stuff"
