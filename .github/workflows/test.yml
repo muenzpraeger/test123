@@ -30,6 +30,7 @@ jobs:
                   mkdir sfdx-cli
                   tar xJf sfdx-linux-amd64.tar.xz -C sfdx-cli --strip-components 1
                   ./sfdx-cli/install
+                  sfdx update
 
             # Do pre-rel stuff
             - name: Do pre-rel stuff
@@ -47,5 +48,8 @@ jobs:
             # Authenticate dev hub
             - name: Echo outputs
               run: |
+                  echo "I am here"
                   echo ${{ steps.test-with-json.outputs.result }}
                   echo "My name is master"
+                  echo $(echo ${{ steps.test-with-json.outputs.result }} | jq '.status')
+                  echo "More stuff"
