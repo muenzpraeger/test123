@@ -27,9 +27,9 @@ jobs:
             - name: Install Salesforce CLI
               run: sudo npm install -g sfdx-cli
 
-            # Do pre-rel stuff
-            - name: Do pre-rel stuff
-              run: sudo sfdx plugins:install salesforcedx@pre-release
+            # # Do pre-rel stuff
+            # - name: Do pre-rel stuff
+            #   run: sudo sfdx plugins:install salesforcedx@pre-release
 
             # Authenticate dev hub
             - name: Authenticate Dev Hub
@@ -42,4 +42,4 @@ jobs:
 
             # Authenticate dev hub
             - name: Echo outputs
-              run: echo ${{ steps.test-with-json.outputs }}
+              run: echo ${{ steps.test-with-json.outputs.result }}
