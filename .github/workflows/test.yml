@@ -45,7 +45,7 @@ jobs:
               id: test-with-json
               run: |
                   sfdx force:org:list --json
-                  ORG_JSON="$(sfdx force:org:list --json | jq -c)"
+                  ORG_JSON="$(sfdx force:org:list --json)"
                   echo $ORG_JSON
                   echo "::set-output name=unfiltered::$ORG_JSON"
                   echo "::set-output name=result::$(sfdx force:org:list --json | jq .status)"
