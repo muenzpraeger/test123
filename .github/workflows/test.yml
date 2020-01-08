@@ -16,17 +16,21 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             # Checkout the code in the pull request
-            - name: 'Checkout source code'
+            - name: Checkout source code
               uses: actions/checkout@v1
 
             # Store secret for dev hub
-            - name: 'Populate auth file with DEVHUB_SFDX_URL secret'
-              run: 'echo ${{ secrets.DEVHUB_SFDX_URL}} > ./DEVHUB_SFDX_URL.txt'
+            - name: Populate auth file with DEVHUB_SFDX_URL secret
+              run: echo ${{ secrets.DEVHUB_SFDX_URL}} > ./DEVHUB_SFDX_URL.txt
 
             # Install and update Salesforce CLI
-            - name: 'Install Salesforce CLI'
-              run: 'sudo npm install -g sfdx-cli && sfdx update'
+            - name: Install Salesforce CLI
+              run: sudo npm install -g sfdx-cli
+
+            # Do pre-rel stuff
+            - name: Do pre-rel stuff
+              run: sfdx plugins:install salesforcedx@pre-release
 
             # Authenticate dev hub
-            - name: 'Authenticate Dev Hub'
-              run: 'sfdx force:auth:sfdxurl:store -f ./DEVHUB_SFDX_URL.txt -a devhub -d'
+            - name: Authenticate Dev Hub
+              run: sfdx force:auth:sfdxurl:store -f ./DEVHUB_SFDX_URL.txt -a devhub -d
