@@ -29,7 +29,7 @@ jobs:
 
             # Do pre-rel stuff
             - name: Do pre-rel stuff
-              run: sudo sfdx plugins:install salesforcedx@pre-release --dev-debug
+              run: sudo sfdx plugins:install salesforcedx@pre-release
 
             # Authenticate dev hub
             - name: Authenticate Dev Hub
