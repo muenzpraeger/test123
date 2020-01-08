@@ -44,7 +44,8 @@ jobs:
             - name: List orgs
               id: test-with-json
               run: |
-                  echo "::set-output name=result::$(sfdx force:org:list --json)"
+                  echo "::set-output name=unfiltered::$(sfdx force:org:list --json)"
+                  echo "::set-output name=result::$(sfdx force:org:list --json | jq .status)"
                   echo "::set-output name=blubber::TheValue"
 
             # Authenticate dev hub
@@ -52,8 +53,12 @@ jobs:
               run: |
                   echo "The start"
                   echo ${{ steps.test-with-json.outputs }}
+                  echo "The the moar"
+                  echo ${{ steps.test-with-json.outputs.blubber }}
                   echo "I am here"
                   echo ${{ steps.test-with-json.outputs.result }}
+                  echo "unfiltered"
+                  echo ${{ steps.test-with-json.outputs.unfiltered }}
                   echo "My name is master"
                   echo $(echo ${{ steps.test-with-json.outputs.result }} | jq '.status')
                   echo "More stuff"
