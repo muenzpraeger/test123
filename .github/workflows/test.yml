@@ -1,0 +1,32 @@
+# Unique name for this workflow
+name: Test
+
+# Definition when the workflow should run
+on:
+    pull_request:
+        types: [opened, synchronize, reopened]
+        branches-ignore:
+            - prerelease/spring[2-9][0-9]
+            - prerelease/summer[2-9][0-9]
+            - prerelease/winter[2-9][0-9]
+
+# Jobs to be executed
+jobs:
+    scratch-org-test:
+        runs-on: ubuntu-latest
+        steps:
+            # Checkout the code in the pull request
+            - name: 'Checkout source code'
+              uses: actions/checkout@v1
+
+            # Store secret for dev hub
+            - name: 'Populate auth file with DEVHUB_SFDX_URL secret'
+              run: 'echo ${{ secrets.DEVHUB_SFDX_URL}} > ./DEVHUB_SFDX_URL.txt'
+
+            # Install and update Salesforce CLI
+            - name: 'Install Salesforce CLI'
+              run: 'sudo npm install -g sfdx-cli && sfdx update'
+
+            # Authenticate dev hub
+            - name: 'Authenticate Dev Hub'
+              run: 'sfdx force:auth:sfdxurl:store -f ./DEVHUB_SFDX_URL.txt -a devhub -d'
