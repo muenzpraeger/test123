@@ -29,7 +29,7 @@ jobs:
 
             # Do pre-rel stuff
             - name: Do pre-rel stuff
-              run: sudo sfdx plugins:install salesforcedx@pre-release
+              run: sudo sfdx plugins:install @salesforce/lwc-dev-server
 
             # Authenticate dev hub
             - name: Authenticate Dev Hub
