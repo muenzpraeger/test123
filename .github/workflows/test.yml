@@ -45,8 +45,8 @@ jobs:
               id: test-with-json
               run: |
                   ORG_JSON="$(sfdx force:org:list --json)"
-                  echo $ORG_JSON
-                  echo "::set-output name=unfiltered::$ORG_JSON"
+                  echo "$($ORG_JSON | jq -c)"
+                  echo "::set-output name=unfiltered::$($ORG_JSON | jq -c)"
                   echo "::set-output name=blubber::TheValue"
 
             # Extract data from package version create result
