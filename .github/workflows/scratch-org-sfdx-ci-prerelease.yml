@@ -57,7 +57,7 @@ jobs:
 
             # Install and update Salesforce CLI
             - name: 'Install Salesforce CLI'
-              run: 'npm install -g sfdx-cli && sfdx update'
+              run: 'sudo npm install -g sfdx-cli'
 
             # Install salesforcedx pre-release plugin
             - name: 'Install salesforcedx pre-release plugin'

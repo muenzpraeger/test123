@@ -1,14 +1,16 @@
 # Unique name for this workflow
-name: Salesforce DX CI (scratch org only)
+name: Salesforce DX CI (packaging)
 
 # Definition when the workflow should run
 on:
     pull_request:
         types: [opened, synchronize, reopened]
-        branches-ignore:
+        branches:
             - prerelease/spring[2-9][0-9]
             - prerelease/summer[2-9][0-9]
             - prerelease/winter[2-9][0-9]
+        paths:
+            - 'force-app/**'
 
 # Jobs to be executed
 jobs:
@@ -47,13 +49,7 @@ jobs:
             - name: 'Unit test Lightning Web Components'
               run: npm run test:unit:coverage
 
-            # Upload code coverage data
-            - name: 'Upload code coverage for LWC to Codecov.io'
-              uses: codecov/codecov-action@v1
-              with:
-                  token: ${{ secrets.CODECOV_TOKEN }}
-
-    scratch-org-test:
+    packaging:
         runs-on: ubuntu-latest
         needs: formatting-and-linting
         steps:
@@ -62,47 +58,25 @@ jobs:
               uses: actions/checkout@v1
 
             # Store secret for dev hub
-            - name: 'Populate auth file with DEVHUB_SFDX_URL secret'
-              run: 'echo ${{ secrets.DEVHUB_SFDX_URL}} > ./DEVHUB_SFDX_URL.txt'
+            - name: 'Populate auth file with DEVHUB_PREREL_SFDX_URL secret'
+              run: 'echo ${{ secrets.DEVHUB_PREREL_SFDX_URL}} > ./DEVHUB_SFDX_URL.txt'
 
             # Install and update Salesforce CLI
             - name: 'Install Salesforce CLI'
-              run: 'npm install -g sfdx-cli && sfdx update'
+              run: 'sudo npm install -g sfdx-cli'
 
             # Authenticate dev hub
             - name: 'Authenticate Dev Hub'
-              run: 'sfdx force:auth:sfdxurl:store -f ./DEVHUB_SFDX_URL.txt -a devhub -d'
+              run: 'sfdx force:auth:sfdxurl:store --sfdxurlfile=./DEVHUB_SFDX_URL.txt --setalias=devhub --setdefaultdevhubusername'
 
-            # Lint Aura components
-            - name: 'Lint Aura components'
-              run: 'sfdx force:lightning:lint force-app/main/default/aura --exit'
+            # Create package version
+            - name: 'Create package version'
+              id: package-version-create
+              run: 'sfdx force:package:version:create -p LWCRecipes -x -w 20 --json'
 
-            # Create scratch org
-            - name: 'Create scratch org'
-              run: 'sfdx force:org:create -f config/project-scratch-def.json -a scratch-org -s -d 1'
-
-            # Deploy source to scratch org
-            - name: 'Push source to scratch org'
-              run: 'sfdx force:source:push'
-
-            # Assign permissionset
-            - name: 'Assign permissionset to default user'
-              run: 'sfdx force:user:permset:assign -n recipes'
-
-            # Import sample data
-            - name: 'Import sample data'
-              run: 'sfdx force:data:tree:import -p ./data/data-plan.json'
-
-            # Run Apex tests in scratch org
-            - name: 'Run Apex tests'
-              run: 'sfdx force:apex:test:run -c -r human -d ./tests/apex -w 20'
-
-            # Upload code coverage data
-            - name: 'Upload code coverage for Apex to Codecov.io'
-              uses: codecov/codecov-action@v1
+            # Extract data from package version create result
+            - name: 'Extract package:version:create result data'
+              id: extract-data-package-version-create
+              uses: muenzpraeger/github-action-extract-sfdx-packaging-result@master
               with:
-                  token: ${{ secrets.CODECOV_TOKEN }}
-
-            # Housekeeping
-            - name: 'Delete scratch org'
-              run: 'sfdx force:org:delete -p -u scratch-org'
+                  json: ${{steps.package-version-create.outputs.result}}

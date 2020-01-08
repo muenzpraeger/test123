@@ -65,7 +65,7 @@ jobs:
 
             # Install and update Salesforce CLI
             - name: 'Install Salesforce CLI'
-              run: 'npm install -g sfdx-cli && sfdx update'
+              run: 'sudo npm install -g sfdx-cli'
 
             # Authenticate dev hub
             - name: 'Authenticate Dev Hub'
