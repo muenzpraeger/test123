@@ -42,4 +42,6 @@ jobs:
 
             # Authenticate dev hub
             - name: Echo outputs
-              run: echo ${{ steps.test-with-json.outputs.result }}
+              run: |
+                  echo ${{ steps.test-with-json.outputs }}
+                  echo "My name is master"
