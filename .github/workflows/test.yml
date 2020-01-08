@@ -25,7 +25,10 @@ jobs:
 
             # Install and update Salesforce CLI
             - name: Install Salesforce CLI
-              run: sudo npm install -g sfdx-cli
+              run: |
+                  mkdir ~/.npm-global
+                  NPM_CONFIG_PREFIX=~/.npm-global
+                  npm install sfdx-cli
 
             # # Do pre-rel stuff
             # - name: Do pre-rel stuff
