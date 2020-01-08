@@ -26,13 +26,14 @@ jobs:
             # Install and update Salesforce CLI
             - name: Install Salesforce CLI
               run: |
-                  mkdir ~/.npm-global
-                  npm config set prefix ~/.npm-global
-                  npm install -g sfdx-cli
+                  wget https://developer.salesforce.com/media/salesforce-cli/sfdx-linux-amd64.tar.xz
+                  mkdir sfdx-cli
+                  tar xJf sfdx-linux-amd64.tar.xz -C sfdx-cli --strip-components 1
+                  ./sfdx-cli/install
 
-            # # Do pre-rel stuff
-            # - name: Do pre-rel stuff
-            #   run: sudo sfdx plugins:install salesforcedx@pre-release
+            # Do pre-rel stuff
+            - name: Do pre-rel stuff
+              run: sfdx plugins:install salesforcedx@pre-release
 
             # Authenticate dev hub
             - name: Authenticate Dev Hub
