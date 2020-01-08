@@ -44,7 +44,9 @@ jobs:
             - name: List orgs
               id: test-with-json
               run: |
-                  echo "::set-output name=unfiltered::$(sfdx force:org:list --json | jq -c)"
+                  ORG_JSON="$(sfdx force:org:list --json | jq -c)"
+                  echo $ORG_JSON
+                  echo "::set-output name=unfiltered::$ORG_JSON"
                   echo "::set-output name=result::$(sfdx force:org:list --json | jq .status)"
                   echo "::set-output name=blubber::TheValue"
 
