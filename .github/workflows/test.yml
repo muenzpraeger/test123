@@ -28,7 +28,7 @@ jobs:
               run: |
                   mkdir ~/.npm-global
                   NPM_CONFIG_PREFIX=~/.npm-global
-                  npm install sfdx-cli
+                  npm install -g sfdx-cli
 
             # # Do pre-rel stuff
             # - name: Do pre-rel stuff
