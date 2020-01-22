@@ -1,0 +1,19 @@
+# Unique name for this workflow
+name: Master Commit
+
+# Definition when the workflow should run
+on:
+    push:
+        branches:
+            - master
+
+# Jobs to be executed
+jobs:
+    validate-branch-name:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Validate branch name requirements
+              uses: deepakputhraya/action-branch-name@master
+              with:
+                  regex: '([a-z])+'
+                  min_length: 2
