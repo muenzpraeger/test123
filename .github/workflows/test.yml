@@ -1,0 +1,71 @@
+# Unique name for this workflow
+name: Test
+
+# Definition when the workflow should run
+on:
+    pull_request:
+        types: [opened, synchronize, reopened]
+        branches-ignore:
+            - prerelease/spring[2-9][0-9]
+            - prerelease/summer[2-9][0-9]
+            - prerelease/winter[2-9][0-9]
+
+# Jobs to be executed
+jobs:
+    scratch-org-test:
+        runs-on: ubuntu-latest
+        steps:
+            # Checkout the code in the pull request
+            - name: Checkout source code
+              uses: actions/checkout@v1
+
+            # Store secret for dev hub
+            - name: Populate auth file with DEVHUB_SFDX_URL secret
+              run: echo ${{ secrets.DEVHUB_SFDX_URL}} > ./DEVHUB_SFDX_URL.txt
+
+            # Install and update Salesforce CLI
+            - name: Install Salesforce CLI
+              run: |
+                  wget https://developer.salesforce.com/media/salesforce-cli/sfdx-linux-amd64.tar.xz
+                  mkdir sfdx-cli
+                  tar xJf sfdx-linux-amd64.tar.xz -C sfdx-cli --strip-components 1
+                  ./sfdx-cli/install
+                  sfdx update
+
+            # Do pre-rel stuff
+            - name: Do pre-rel stuff
+              run: sfdx plugins:install salesforcedx@pre-release
+
+            # Authenticate dev hub
+            - name: Authenticate Dev Hub
+              run: sfdx force:auth:sfdxurl:store -f ./DEVHUB_SFDX_URL.txt -a devhub -d
+
+            # Authenticate dev hub
+            - name: List orgs
+              id: test-with-json
+              run: |
+                  echo "::set-output name=unfiltered::$(sfdx force:org:list --json | jq -c .)"
+                  echo "::set-output name=blubber::TheValue"
+
+            # Extract data from package version create result
+            - name: 'Extract package:version:create result data'
+              id: extract-data-package-version-create
+              uses: muenzpraeger/github-action-extract-sfdx-packaging-result@master
+              with:
+                  json: ${{steps.test-with-json.outputs.unfiltered}}
+
+            # Authenticate dev hub
+            - name: Echo outputs
+              run: |
+                  echo "The start"
+                  echo ${{ steps.test-with-json.outputs }}
+                  echo "The the moar"
+                  echo ${{ steps.test-with-json.outputs.blubber }}
+                  echo "I am here"
+                  echo ${{ steps.test-with-json.outputs.result }}
+                  echo "unfiltered with jq"
+                  echo $(${{ steps.test-with-json.outputs.unfiltered }} | jq .status)
+                  echo "unfiltered without jq"
+                  echo $(${{ steps.test-with-json.outputs.unfiltered }})
+                  echo "My name is master"
+                  echo "More stuff"

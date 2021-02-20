@@ -59,21 +59,20 @@ jobs:
 
             # Store secret for dev hub
             - name: 'Populate auth file with DEVHUB_PREREL_SFDX_URL secret'
-              shell: bash
               run: 'echo ${{ secrets.DEVHUB_PREREL_SFDX_URL}} > ./DEVHUB_SFDX_URL.txt'
+
+            # Install and update Salesforce CLI
+            - name: 'Install Salesforce CLI'
+              run: 'sudo npm install -g sfdx-cli'
 
             # Authenticate dev hub
             - name: 'Authenticate Dev Hub'
-              uses: forcedotcom/salesforcedx-actions@master
-              with:
-                  args: 'force:auth:sfdxurl:store --sfdxurlfile=./DEVHUB_SFDX_URL.txt --setalias=devhub --setdefaultdevhubusername'
+              run: 'sfdx force:auth:sfdxurl:store --sfdxurlfile=./DEVHUB_SFDX_URL.txt --setalias=devhub --setdefaultdevhubusername'
 
             # Create package version
             - name: 'Create package version'
               id: package-version-create
-              uses: forcedotcom/salesforcedx-actions@master
-              with:
-                  args: 'force:package:version:create -p LWCRecipes -x -w 20 --json'
+              run: 'sfdx force:package:version:create -p LWCRecipes -x -w 20 --json'
 
             # Extract data from package version create result
             - name: 'Extract package:version:create result data'
